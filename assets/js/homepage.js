@@ -66,8 +66,27 @@ function saveHistory(code, name) {
         var savePark = {
             state: parksOfState.state,
             name: name,
-            code: code
-
+            code: code,
+            imageUrl: '',
+            imageAlt: '',
+            descript: '',
+            fee: '',
+            hours: '',
+            weather: '',
+            lat: '',
+            lon: '',
+        }
+        for ( var i = 0; i < parksOfState.code.length; i ++) {
+            if(code === parksOfState.code[i] && (!found)) {
+                savePark.imageUrl = parksOfState.imageUrl[i]
+                savePark.imageAlt = parksOfState.imageAlt[i]
+                savePark.descript = parksOfState.descript[i]
+                savePark.fee = parksOfState.fee[i]
+                savePark.hours = parksOfState.hours[i]
+                savePark.weather = parksOfState.weather[i]
+                savePark.lat = parksOfState.lat[i]
+                savePark.lon = parksOfState.lon[i]
+            }
         }
         history.push(savePark)
         localStorage.setItem('history', JSON.stringify(history)
@@ -128,6 +147,7 @@ function displayParksList() {
                 localStorage.setItem('parkCurrent', JSON.stringify(parkCurrent))
                 ocation.href = './parkpage.html'
             })
+            parksList.appendChild(listPark)
         }
     }
 
