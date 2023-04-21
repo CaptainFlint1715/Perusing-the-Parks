@@ -12,6 +12,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <script
+    src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+  ></script>
+  
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.min.js"
+  ></script>
 </head>
 
 <body class="leading-normal tracking-normal text-white gradient" style="font-family: 'Bubblegum Sans', sans-serif;">
@@ -38,8 +45,7 @@
         </g>
     </svg>
 
-
-    
+    <!-- Selected Park's Information -->
     <section class="bg-white border-b py-8">
         <div class="container max-w-5xl mx-auto m-8">
             <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
@@ -50,29 +56,89 @@
             </div>
             <div class="flex flex-wrap">
                 <div class="w-5/6 sm:w-1/2 p-6">
-                    <h3 class="text-3xl text-gray-800 font-bold leading-none mb-3">
-                        Lorem ipsum dolor sit amet aaaaa
+                    <h3 id="parkName" class="text-3xl text-gray-800 font-bold leading-none mb-3">
+                        State Park Name
                     </h3>
-                    <p class="text-gray-600 mb-8">
+                    <p id= "parkinfo" class="text-gray-600 mb-8">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at ipsum eu nunc commodo
                         posuere et sit
                         amet ligula. bbbbbbb
-                        <br />
-                        <br />
-                        Images from:
-                        <a class="text-pink-500 underline" href="https://undraw.co/">undraw.co</a>
                     </p>
                 </div>
 
-                <div class="w-full sm:w-1/2 p-6">
-                    <img class="w-full md:w-4/5 z-50" src="hero.png" />
+                <!-- Image of National Park services Badge -->
+                <div id="parkPicture" class="w-full sm:w-1/2 p-6">
+                    <img class="w-full md:w-4/5 z-50" src="./assets/images/nps.jpg" />
                 </div>
             </div>
 
-            <div class="flex flex-wrap flex-col-reverse sm:flex-row">
-                <div class="w-full sm:w-1/2 p-6 mt-6">
-                    <img class="w-full md:w-4/5 z-50" src="hero.png" />
+            <!-- weather widget -->
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full sm:w-1/2 p-6">
+                    <div class="flex flex-wrap w-full lg:w-auto">
+                        <div class="w-full lg:w-1/2 flex ml-0">
+                            <div class="lg:my-3 bg-gray-800 text-white p-8 rounded-lg w-full">
+                                <div class="flex justify-between w-64 mb-4 w-full">
+                                    <div class="w-auto uppercase font-bold text-90 text-green-500 ">Today's Forcast Highs</div>
+                                </div>
+                                <div class="flex justify-between w-64 mb-4 w-full">
+                                    <div class="w-auto text-90">Precipitation</div><div id="precip" class="w-auto text-right">10 %</div>
+                                </div>
+                                <div class="flex justify-between w-64 mb-8 w-full">
+                                    <div class="w-auto text-90">Wind</div><div id="windSpeed" class="w-auto text-right">12 Mph</div>
+                                </div>
+
+                                <!-- today -->
+                                <div class="flex flex-row">
+                                    <div class="flex flex-col w-1/4 bg-gray-100 text-black rounded-lg pb-4">
+                                        <div class="text-center pt-2 mb-2">
+                                            <img class="w-full md:w-4/5 z-50" src="./assets/images/rain.png" />
+                                        </div>
+                                        <div id = "todaysymbol" class="text-center">
+                                            <b id="today" class="font-normal"> </b><br>
+                                            <strong id="todayTemp" class="text-xl">29ºC</strong>
+                                        </div>
+                                    </div>
+                
+                                    <!-- tomorrow -->
+                                    <div class="flex flex-col w-1/4 bg-green-600 rounded-lg">
+                                        <div class="text-center pt-2 mb-2">
+                                            <img id="tomorrowsymbol" class="w-full md:w-4/5 z-50" src="./assets/images/cloud.png" />
+                                        </div>
+                                        <div class="text-center">
+                                            <b id="tomorrow" class="font-normal"> </b><br>
+                                            <strong id="tomorrowTemp" class="text-xl">21ºC</strong>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2 days out -->
+                                    <div class="flex flex-col w-1/4 bg-green-600 rounded-lg">
+                                        <div class="text-center pt-2 mb-2">
+                                            <img id ="2daysymbol" class="w-full md:w-4/5 z-50" src="./assets/images/cloud.png" />
+                                        </div>
+                                        <div class="text-center">
+                                            <b id="2days" class="font-normal"> </b><br>
+                                            <strong id="2daysTemp" class="text-xl">18ºC</strong>
+                                        </div>
+                                    </div>
+
+                                    <!-- 3 days out -->
+                                    <div class="flex flex-col w-1/4 bg-green-600 rounded-lg">
+                                        <div class="text-center pt-2 mb-2">
+                                            <img id = "3daysymbol" class="w-full md:w-4/5 z-50" src="./assets/images/sun.png" />
+                                        </div>
+                                        <div class="text-center">
+                                            <b id="3days" class="font-normal"> </b><br>
+                                            <strong id="3daysTemp" class="text-xl">25ºC</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
+
                 <div class="w-full sm:w-1/2 p-6 mt-6">
                     <div class="align-middle">
                         <h3 class="text-3xl text-gray-800 font-bold leading-none mb-3">
@@ -82,18 +148,12 @@
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at ipsum eu nunc commodo
                             posuere et sit
                             amet ligula. ddddd
-                            <br />
-                            <br />
-                            Images from:
-                            <a class="text-pink-500 underline" href="https://undraw.co/">undraw.co</a>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-
 
     <!-- Fun wavey patterns for bottom -->
     <svg class="wave-top" viewBox="0 0 1439 147" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -125,21 +185,21 @@
 
     <footer class="container mx-auto text-center py-6 mb-12">
         <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-white">
-            Call to Action
+            Check Out Other Parks
         </h2>
         <div class="w-full mb-4">
             <div class="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
         </div>
-        <h3 class="my-4 text-3xl leading-tight">
-            Main Hero Message to sell yourself!
-        </h3>
-        <button
-            class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out ">
-            Action!
+
+        <!-- Link to return to homepage -->
+        <button onclick="window.location='index2.html';"
+            class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out text-green-800">
+            Retun to Homepage
         </button>
     </footer>
 
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/parkpage.js"></script>
+    
 </body>
 
 
