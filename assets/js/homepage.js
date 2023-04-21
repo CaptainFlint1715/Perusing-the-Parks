@@ -145,7 +145,7 @@ function displayParksList() {
                 parkCurrent.name = e.target.textContent
                 saveHistory(parkCurrent.code, parkCurrent.name)
                 localStorage.setItem('parkCurrent', JSON.stringify(parkCurrent))
-                ocation.href = './parkpage.html'
+                location.href = './parkpage.html'
             })
             parksList.appendChild(listPark)
         }
