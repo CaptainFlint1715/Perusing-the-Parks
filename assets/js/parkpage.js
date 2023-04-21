@@ -1,24 +1,4 @@
-// dayjs for weather widget
-var today = dayjs();
-
-var dayWeek = today.format('ddd');
-$('#today').text(dayWeek);
-
-var tomorrow = today.add(1, 'days');
-
-$('#tomorrow').text(tomorrow.format('ddd'));
-
-var twodays = today.add(2, 'days');
-$('#2days').text(twodays.format('ddd'));
-
-var threedays = today.add(3, 'days');
-$('#3days').text(threedays.format('ddd'));
-
-
-
-
-// JavaScript for Park Page
-
+// adding weather api
 var requestUrl = "https://api.open-meteo.com/v1/forecast?" + LAT.var + LONG.var + "daily=weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago"
 
 var responseText = document.getElementById('response-text');
@@ -107,7 +87,7 @@ var fetchCampground = function(parkCode) {
     });
 };
 
-// visior center info
+// visitor center info
 // array
 var visitorCenter = {
     name: "",
@@ -162,5 +142,33 @@ var fetchVisitorCenter = function(parkCode) {
         console.error(error);
         visitorCenterErrorEl.style.display = "block";
         console.log("API Catch- visitor center fetch failed");
+    });
+};
+
+// forecast info
+var parkForecast = {
+    forecastDate: [],
+    forecastTemp: []
+};
+// display function 
+
+// fetch funciton 
+var fetchForecast = function (latitude, longitude) {
+    var apiUrlForecast = "https://api.open-meteo.com/v1/forecast?" + LAT.var + LONG.var + "daily=weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago"
+    fetch(apiUrlForecast).then(function (response){
+        return response.json();
+    })
+    .then(function (data) {
+        initializeParkForecast();
+        if (data) {
+            for (i=0; i<5, i++;) {
+                parkForecast.forecastDate.push(moment.unix(data.daily[i].dt).utcOffset(data.timezone / 3600).format("MMM Do, YYYY"));
+                parkForecast.forecastTemp.push(data.daily[i].temp.day.toFixed(1));
+            }
+        }
+    })
+    .catch(function (error) {
+        console.error(error);
+        console.log("Hello from weather");
     });
 };
