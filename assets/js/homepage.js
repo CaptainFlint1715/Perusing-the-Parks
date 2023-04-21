@@ -14,19 +14,88 @@ var parkCurrent = {
 
 var parksOfState = {
     state: '',
-    code: '',
-    name: '',
-    imageUrl: '',
-    imageAlt: '',
-    descript: '',
-    fee: '',
-    hours: '',
-    weather: '',
-    lat: '',
-    lon: '',
+    code: [],
+    name: [],
+    imageUrl: [],
+    imageAlt: [],
+    descript: [],
+    fee: [],
+    hours: [],
+    weather: [],
+    lat: [],
+    lon: [],
 }
 
-var parksHistory = []
+var history = []
+
+function refresh (id) {
+    id.innerHTML = ''
+}
+
+function restartClean () {
+    history = getHistory()
+    displayHistory(history)
+    refresh(parksList)
+}
+
+function getHistory() {
+    var parksStored = localStorage.getItem('history')
+    parksStored = json.parse(parksStored)
+    if (!parksStored) {
+        parksStored = []
+    }
+    return parksStored
+}
+
+function newPark(code) {
+    var found = false
+    if (history) {
+        for (var i = 0; i < history.length; i++) {
+            if (history[i].code === parkCurrent.code) {
+                found = true
+            }
+        }
+    }
+    return found
+}
+
+function saveHistory(code, name) {
+    newPark(code)
+
+    if (!found) {
+        var savePark = {
+            state: parksOfState.state,
+            name: name,
+            code: code
+
+        }
+        history.push(savePark)
+        localStorage.setItem('history', JSON.stringify(history)
+        )
+    }
+}
+
+function displayHistory(history) {
+    refresh(parksPrevious)
+
+    if(history) {
+        for (var i = 0; i < history.length; i++) {
+            var historyListEl = document.createElement('li')
+            historyListEl.id = history[i].code
+            historyListEl.textContent = history[i].name
+            historyListEl.addEventListener('click', function(e) {
+                e.preventDefault()
+                restartClean()
+                saveHistory()
+                parkCurrent.code = e.target.id
+                parkCurrent.name = e.target.textContent
+                localStorage.setItem('parkCurrent', JSON.stringify(parkCurrent))
+                window.location.href = './parkpage.html'
+            })
+            parksPrevious.appendChild(historyListEl)
+        }
+    }
+}
 
 function initParks() {
     parksOfState.state = '';
@@ -52,11 +121,12 @@ function displayParksList() {
             listPark.addEventListener('click', function(e) {
                 e.preventDefault()
                 // save parks
+                
                 parkCurrent.code = e.target.id
                 parkCurrent.name = e.target.textContent
-                // save parksPrevious
-                // set local storage item
-                window.location.href = './parkpage.html'
+                saveHistory(parkCurrent.code, parkCurrent.name)
+                localStorage.setItem('parkCurrent', JSON.stringify(parkCurrent))
+                ocation.href = './parkpage.html'
             })
         }
     }
@@ -102,6 +172,9 @@ function fetchParks(state) {
     })
 
 }
+
+restartClean()
+displayHistory()
 
 stateName.onchange = function () {
     // clean start
