@@ -113,6 +113,12 @@ function displayHistory(parkHistory) {
             historyListEl.textContent = parkHistory[i].name
             historyListEl.setAttribute('style', 'color: black')
             historyListEl.style.cursor = 'pointer'
+            historyListEl.addEventListener('mouseover', function() {
+                this.style.color = 'green';
+                });
+            historyListEl.addEventListener('mouseout', function() {
+                  this.style.color = 'black';
+                });
             historyListEl.addEventListener('click', function(e) {
                 e.preventDefault()
                 parkCurrent.code = e.target.id
@@ -136,6 +142,12 @@ function displayParksList() {
             listPark.id = parksOfState.code[i]
             listPark.setAttribute('style', 'color: black')
             listPark.style.cursor = 'pointer'
+            listPark.addEventListener('mouseover', function() {
+                this.style.color = 'green';
+                });
+            listPark.addEventListener('mouseout', function() {
+                  this.style.color = 'black';
+                });
 
             listPark.addEventListener('click', function(e) {
                 e.preventDefault()
@@ -146,7 +158,7 @@ function displayParksList() {
                 console.log(parkCurrent.code)
                 saveHistory(parkCurrent.code, parkCurrent.name)
                 localStorage.setItem('parkCurrent', JSON.stringify(parkCurrent))
-                // location.href = './parkpage.html'
+                location.href = './parkpage.html'
             })
             parksList.appendChild(listPark)
         }
