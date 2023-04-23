@@ -1,11 +1,10 @@
 // JavaScript for Home Page
 var keyNPS = 'BDfajyEhltU1a2tl5CuDG7MpyjVByr4sITJOfWP0'
 
-var statesList = $('states-list')
-var stateName = $('state-name')
-var parksList = $('parks-list')
-var parksPrevious = $('parks-history')
-var parkHeader = $('park-header')
+var statesList = document.getElementById('states-list')
+var parksList = document.getElementById('parks-list')
+var parksPrevious = document.getElementById('parks-history')
+var parkHeader = document.getElementById('park-header')
 
 var parkCurrent = {
     code: '',
@@ -39,8 +38,7 @@ function restartClean () {
 }
 
 function getHistory() {
-    var parksStored = localStorage.getItem('history')
-    parksStored = json.parse(parksStored)
+    var parksStored = JSON.parse(localStorage.getItem('history'))
     if (!parksStored) {
         parksStored = []
     }
@@ -51,7 +49,7 @@ function newPark(code) {
     var found = false
     if (history) {
         for (var i = 0; i < history.length; i++) {
-            if (history[i].code === parkCurrent.code) {
+            if (history[i].code === code) {
                 found = true
             }
         }
@@ -116,19 +114,7 @@ function displayHistory(history) {
     }
 }
 
-function initParks() {
-    parksOfState.state = '';
-    parksOfState.code.length = 0;
-    parksOfState.name.length = 0;
-    parksOfState.imageUrl.length = 0;
-    parksOfState.imageAlt.length = 0;
-    parksOfState.descript.length = 0;
-    parksOfState.fee.length = 0;
-    parksOfState.hours.length = 0;
-    parksOfState.weather.length = 0;
-    parksOfState.lat.length = 0;
-    parksOfState.lon.length = 0;
-}
+
 
 function displayParksList() {
     if(parksOfState) {
@@ -151,6 +137,20 @@ function displayParksList() {
         }
     }
 
+}
+
+function initParks() {
+    parksOfState.state = '';
+    parksOfState.code.length = 0;
+    parksOfState.name.length = 0;
+    parksOfState.imageUrl.length = 0;
+    parksOfState.imageAlt.length = 0;
+    parksOfState.descript.length = 0;
+    parksOfState.fee.length = 0;
+    parksOfState.hours.length = 0;
+    parksOfState.weather.length = 0;
+    parksOfState.lat.length = 0;
+    parksOfState.lon.length = 0;
 }
 
 function fetchParks(state) {
@@ -196,12 +196,19 @@ function fetchParks(state) {
 restartClean()
 displayHistory()
 
-stateName.onchange = function () {
-    // clean start
-    var stateAbbr = $(this).find('option:selected').attr('id')
 
-    var stateNameCurrent = stateName.value
-    parkHeader.textContent = 'National Parks in ' + stateNameCurrent
+
+function stateselect() {
+    // restartClean()
+    var stateName = document.getElementById('state-name')
+
+    var stateAbbr = (stateName.options[stateName.selectedIndex]).value
+    alert(stateAbbr)
+    
+
+    var stateNameCurrent = stateName.innerHTML
+    parkHeader.textContent = 'National Parks in' + stateNameCurrent
 
     fetchParks(stateAbbr)
 }
+
