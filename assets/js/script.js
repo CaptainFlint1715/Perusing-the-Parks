@@ -25,42 +25,53 @@ var parksOfState = {
     lon: [],
 }
 
-var history = []
+var parkHistory;
+try {
+  parkHistory = JSON.parse(localStorage.getItem('parkHistory')) || [];
+} catch (e) {
+  console.log("Error parsing park history from localStorage:", e);
+  parkHistory = [];
+}
 
 function refresh (id) {
     id.innerHTML = ''
 }
 
 function restartClean () {
-    history = getHistory()
-    displayHistory(history)
+    parkHistory = getHistory()
+    displayHistory(parkHistory)
     refresh(parksList)
 }
 
 function getHistory() {
-    var parksStored = JSON.parse(localStorage.getItem('history'))
-    if (!parksStored) {
+    var parksStored = JSON.parse(localStorage.getItem('parkHistory'))
+    if (!Array.isArray(parksStored)) {
         parksStored = []
     }
     return parksStored
 }
 
 function newPark(code) {
+    console.log(code)
     var found = false
-    if (history) {
-        for (var i = 0; i < history.length; i++) {
-            if (history[i].code === code) {
+    if (parkHistory) {
+        for (var i = 0; i < parkHistory.length; i++) {
+            if (parkHistory[i].code === parkCurrent.code) {
                 found = true
             }
         }
     }
+    console.log(found)
     return found
+    
 }
 
 function saveHistory(code, name) {
-    newPark(code)
 
-    if (!found) {
+    foundIt = newPark(code)
+    
+
+    if (!foundIt) {
         var savePark = {
             state: parksOfState.state,
             name: name,
@@ -75,7 +86,7 @@ function saveHistory(code, name) {
             lon: '',
         }
         for ( var i = 0; i < parksOfState.code.length; i ++) {
-            if(code === parksOfState.code[i] && (!found)) {
+            if(code === parksOfState.code[i] && (!foundIt)) {
                 savePark.imageUrl = parksOfState.imageUrl[i]
                 savePark.imageAlt = parksOfState.imageAlt[i]
                 savePark.descript = parksOfState.descript[i]
@@ -86,24 +97,30 @@ function saveHistory(code, name) {
                 savePark.lon = parksOfState.lon[i]
             }
         }
-        history.push(savePark)
-        localStorage.setItem('history', JSON.stringify(history)
-        )
+        parkHistory.push(savePark)
+        localStorage.setItem('parkHistory', JSON.stringify(parkHistory))
+        
     }
 }
 
-function displayHistory(history) {
+function displayHistory(parkHistory) {
     refresh(parksPrevious)
 
-    if(history) {
-        for (var i = 0; i < history.length; i++) {
+    if(parkHistory) {
+        for (var i = 0; i < parkHistory.length; i++) {
             var historyListEl = document.createElement('li')
-            historyListEl.id = history[i].code
-            historyListEl.textContent = history[i].name
+            historyListEl.id = parkHistory[i].code
+            historyListEl.textContent = parkHistory[i].name
+            historyListEl.setAttribute('style', 'color: black')
+            historyListEl.style.cursor = 'pointer'
+            historyListEl.addEventListener('mouseover', function() {
+                this.style.color = 'green';
+                });
+            historyListEl.addEventListener('mouseout', function() {
+                  this.style.color = 'black';
+                });
             historyListEl.addEventListener('click', function(e) {
                 e.preventDefault()
-                restartClean()
-                saveHistory()
                 parkCurrent.code = e.target.id
                 parkCurrent.name = e.target.textContent
                 localStorage.setItem('parkCurrent', JSON.stringify(parkCurrent))
@@ -118,10 +135,19 @@ function displayHistory(history) {
 
 function displayParksList() {
     if(parksOfState) {
-        for (var i =0; i < parksOfState.name.length; i++) {
+        console.log(parksOfState)
+        for (var i = 0; i < parksOfState.code.length; i++) {
             var listPark = document.createElement('li')
-            listPark.textContent = parksOfState[i].name
-            listPark.id = parksOfState[i].code
+            listPark.textContent = parksOfState.name[i]
+            listPark.id = parksOfState.code[i]
+            listPark.setAttribute('style', 'color: black')
+            listPark.style.cursor = 'pointer'
+            listPark.addEventListener('mouseover', function() {
+                this.style.color = 'green';
+                });
+            listPark.addEventListener('mouseout', function() {
+                  this.style.color = 'black';
+                });
 
             listPark.addEventListener('click', function(e) {
                 e.preventDefault()
@@ -129,6 +155,7 @@ function displayParksList() {
                 
                 parkCurrent.code = e.target.id
                 parkCurrent.name = e.target.textContent
+                console.log(parkCurrent.code)
                 saveHistory(parkCurrent.code, parkCurrent.name)
                 localStorage.setItem('parkCurrent', JSON.stringify(parkCurrent))
                 location.href = './parkpage.html'
@@ -136,8 +163,9 @@ function displayParksList() {
             parksList.appendChild(listPark)
         }
     }
-
 }
+
+
 
 function initParks() {
     parksOfState.state = '';
@@ -155,10 +183,15 @@ function initParks() {
 
 function fetchParks(state) {
     initParks()
+    
+    var parksAPI = 'https://developer.nps.gov/api/v1/parks?stateCode=' + state + '&api_key=' + keyNPS
 
-    var parksAPI = 'https://developer.nps.gov/api/vi/parks?stateCode=' + state + '&api_key=' + keyNPS
-
-    fetch(parksAPI).then(function(response) {
+    fetch(parksAPI, {
+        headers: {
+            'Authorization': keyNPS
+        }
+    })
+    .then(function(response) {
         return response.json()
     })
     .then(function(data) {
@@ -168,7 +201,7 @@ function fetchParks(state) {
         for (var i = 0; i < data.data.length; i++) {
             parksOfState.code[i] = data.data[i].parkCode
             parksOfState.name[i] = data.data[i].fullName
-            if (data.data.images[0]) {
+            if (data.data[i].images[0]) {
                 parksOfState.imageUrl[i] = data.data[i].images[0].url
                 parksOfState.imageAlt[i] = data.data[i].images[0].altText
             }
@@ -194,20 +227,15 @@ function fetchParks(state) {
 }
 
 restartClean()
-displayHistory()
-
-
 
 function stateselect() {
     // restartClean()
     var stateName = document.getElementById('state-name')
 
     var stateAbbr = (stateName.options[stateName.selectedIndex]).value
-    alert(stateAbbr)
     
-
-    var stateNameCurrent = stateName.innerHTML
-    parkHeader.textContent = 'National Parks in' + stateNameCurrent
+    var stateNameCurrent = (stateName.options[stateName.selectedIndex]).textContent
+    parkHeader.textContent = 'National Parks in ' + stateNameCurrent
 
     fetchParks(stateAbbr)
 }

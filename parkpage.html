@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perusing the Parks</title>
+    <title>Park Information</title>
     <meta name="Perusing the Parks" content="useful tool to find parks and determine the forecast" />
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
     <link rel="stylesheet" type="reset" href="./assets/css/reset.css" />
@@ -48,8 +48,8 @@
     <!-- Selected Park's Information -->
     <section class="bg-white border-b py-8">
         <div class="container max-w-5xl mx-auto m-8">
-            <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
-                Perusing the Parks
+            <h1 id="park-title" class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
+                
             </h1>
             <div class="w-full mb-4">
                 <div class="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
@@ -57,7 +57,7 @@
             <div class="flex flex-wrap">
                 <div class="w-5/6 sm:w-1/2 p-6">
                     <h3 id="parkName" class="text-3xl text-gray-800 font-bold leading-none mb-3">
-                        State Park Name
+                        Key Info
                     </h3>
                     <p id= "parkinfo" class="text-gray-600 mb-8">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at ipsum eu nunc commodo
@@ -68,7 +68,7 @@
 
                 <!-- Image of National Park services Badge -->
                 <div id="parkPicture" class="w-full sm:w-1/2 p-6">
-                    <img class="w-full md:w-4/5 z-50" src="./assets/images/nps.jpg" />
+                    <!-- <img class="w-full md:w-4/5 z-50" src="./assets/images/nps.jpg" /> -->
                 </div>
             </div>
 
