@@ -91,6 +91,8 @@ function getCurrent() {
     park.weather = parkHistory[pIndex].weather
     park.lat = parkHistory[pIndex].lat
     park.lon = parkHistory[pIndex].lon
+    var latitude = park.lat
+    var longitude = park.lon
 
     if(park.imageUrl) {
         var pImg = document.createElement("img")
@@ -102,7 +104,7 @@ function getCurrent() {
     var facts = document.createElement("p")
     facts.textContent = park.descript
     parkFacts.appendChild(facts)
-    fetchForecast(latidue, longitude)
+    fetchForecast(latitude, longitude)
 
     // displayInfo(park.descript, park.fee, park.hours, park.weather)
 }
@@ -216,8 +218,7 @@ function getCurrent() {
 // };
 
 // // forecast info
-var latitude = park.lat
-var longitude = park.lon
+
 
 var parkForecast = {
     forecastDate: [],
