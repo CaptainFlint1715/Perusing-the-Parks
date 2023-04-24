@@ -82,6 +82,10 @@ function getCurrent() {
         pImg.classList.add("responsive-img")
         parkImg.appendChild(pImg)
     }
+    var facts = document.createElement("p")
+    facts.textContent = park.descript
+    parkFacts.appendChild(facts)
+    fetchForecast(latidue, longitude)
 
     // displayInfo(park.descript, park.fee, park.hours, park.weather)
 }
@@ -195,31 +199,34 @@ function getCurrent() {
 // };
 
 // // forecast info
-// var parkForecast = {
-//     forecastDate: [],
-//     forecastTemp: []
-// };
-// // display function 
+var latitude = park.lat
+var longitude = park.lon
 
-// // fetch funciton 
-// var fetchForecast = function (latitude, longitude) {
-//     var apiUrlForecast = "https://api.open-meteo.com/v1/forecast?" + LAT.var + LONG.var + "daily=weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago"
-//     fetch(apiUrlForecast).then(function (response){
-//         return response.json();
-//     })
-//     .then(function (data) {
-//         initializeParkForecast();
-//         if (data) {
-//             for (i=0; i<5, i++;) {
-//                 parkForecast.forecastDate.push(moment.unix(data.daily[i].dt).utcOffset(data.timezone / 3600).format("MMM Do, YYYY"));
-//                 parkForecast.forecastTemp.push(data.daily[i].temp.day.toFixed(1));
-//             }
-//         }
-//     })
-//     .catch(function (error) {
-//         console.error(error);
-//         console.log("Hello from weather");
-//     });
-// };
+var parkForecast = {
+    forecastDate: [],
+    forecastTemp: []
+};
+// display function 
+
+// fetch funciton 
+var fetchForecast = function (latitude, longitude) {
+    var apiUrlForecast = "https://api.open-meteo.com/v1/forecast?" + latitude + longitude + "daily=weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago"
+    fetch(apiUrlForecast).then(function (response){
+        return response.json();
+    })
+    .then(function (data) {
+        initializeParkForecast();
+        if (data) {
+            for (i=0; i<5, i++;) {
+                parkForecast.forecastDate.push(moment.unix(data.daily[i].dt).utcOffset(data.timezone / 3600).format("MMM Do, YYYY"));
+                parkForecast.forecastTemp.push(data.daily[i].temp.day.toFixed(1));
+            }
+        }
+    })
+    .catch(function (error) {
+        console.error(error);
+        console.log("Hello from weather");
+    });
+};
 
 getCurrent()
