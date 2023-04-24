@@ -85,6 +85,7 @@ function getCurrent() {
     var facts = document.createElement("p")
     facts.textContent = park.descript
     parkFacts.appendChild(facts)
+    fetchForecast(latidue, longitude)
 
     // displayInfo(park.descript, park.fee, park.hours, park.weather)
 }
