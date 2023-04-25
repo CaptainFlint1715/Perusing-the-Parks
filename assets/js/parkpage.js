@@ -94,6 +94,7 @@ function getCurrent() {
     var latitude = park.lat
     var longitude = park.lon
     console.log(latitude)
+    console.log(longitude)
 
     if(park.imageUrl) {
         var pImg = document.createElement("img")
@@ -221,43 +222,49 @@ function getCurrent() {
 // // forecast info
 
 
-var parkForecast = {
-    forecastDate: [],
-    forecastTemp: []
-}
+ var parkForecast = {
+        forecastDate: [],
+        forecastTemp: []
+    };
 
 function displayForecast() {
     // today
-    document.getElementById("todayTemp").textContent = parkForecast.forecastTemp[0] + "ºC";
+    document.getElementById("todayTemp").textContent = parkForecast.forecastTemp[0] + "ºF";
   
     // tomorrow
-    document.getElementById("tomorrowTemp").textContent = parkForecast.forecastTemp[1] + "ºC";
+    document.getElementById("tomorrowTemp").textContent = parkForecast.forecastTemp[1] + "ºF";
   
     // 2 days out
-    document.getElementById("2daysTemp").textContent = parkForecast.forecastTemp[2] + "ºC";
+    document.getElementById("2daysTemp").textContent = parkForecast.forecastTemp[2] + "ºF";
   
     // 3 days out
-    document.getElementById("3daysTemp").textContent = parkForecast.forecastTemp[3] + "ºC";
+    document.getElementById("3daysTemp").textContent = parkForecast.forecastTemp[3] + "ºF";
   }
 
 // fetch funciton 
+
+"https://api.weatherapi.com/v1/forecast.json?key=e63fd14c79024a649de02342232504&q=37.79256812,-105.5919572&days=5"
 var fetchForecast = function (latitude, longitude) {
 
-    
-    var apiUrlForecast = "https://api.open-meteo.com/v1/forecast/daily?latitude=" + latitude + "&" + "longitude=" + longitude + "&temperature_2m_max&temperature_unit=fahrenheit&days=5"
+   
 
-    // var apiUrlForecast = "https://api.open-meteo.com/v1/forecast/daily?latitude=" + latitude + "&longitude=" + longitude + "&weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago&origin=*";
-
+    var apiUrlForecast = "https://api.weatherapi.com/v1/forecast.json?key=e63fd14c79024a649de02342232504&q=" + latitude + "," + longitude + "&days=5"
     
     fetch(apiUrlForecast).then(function (response){
-        return response.json();
+    return response.json();
     })
     .then(function (data) {
         // initializeParkForecast();
         if (data) {
+            if (!parkForecast) {
+                parkForecast = {
+                    forecastDate: [],
+                    forecastTemp: []
+                };
+            }
             for (i=0; i<5; i++) {
-                parkForecast.forecastDate.push(moment.unix(data.daily[i].dt).utcOffset(data.timezone / 3600).format("MMM Do, YYYY"));
-                parkForecast.forecastTemp.push(data.daily[i].temp.day.toFixed(1));
+                // parkForecast.forecastDate.push(moment.unix(data[i].daily.dt).utcOffset(data.timezone / 3600).format("MMM Do, YYYY"));
+                parkForecast.forecastTemp.push(data.forecast.forecastday[i].day.maxtemp_f.toFixed(1));
             }
         }
         displayForecast()
@@ -269,3 +276,9 @@ var fetchForecast = function (latitude, longitude) {
 };
 
 getCurrent()
+    // e63fd14c79024a649de02342232504
+
+    
+    // var apiUrlForecast = "https://cors-anywhere.herokuapp.com/https://api.open-meteo.com/v1/forecast/daily?latitude=" + latitude + "&" + "longitude=" + longitude + "&temperature_2m_max&temperature_unit=fahrenheit&days=5"
+
+    // var apiUrlForecast = "https://api.open-meteo.com/v1/forecast/daily?latitude=" + latitude + "&longitude=" + longitude + "&weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago&origin=*";

@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script
     src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
   ></script>
@@ -46,7 +47,7 @@
     </svg>
 
     <!-- Selected Park's Information -->
-    <section class="bg-white border-b py-8">
+    <section class="bg-white border-b py-5">
         <div class="container max-w-5xl mx-auto m-8">
             <h1 id="park-title" class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
                 
@@ -72,62 +73,62 @@
 
             <!-- weather widget -->
             <div class="flex flex-wrap justify-between">
-                <div class="w-full sm:w-1/2 p-6">
+                <div class="w-full sm:w-1/2 p-3">
                     <div class="flex flex-wrap w-full lg:w-auto">
                         <div class="w-full lg:w-1/2 flex ml-0">
-                            <div class="lg:my-3 bg-gray-800 text-white p-8 rounded-lg w-full">
+                            <div class="lg:my-3 bg-gray-800 text-white p-2 rounded-lg w-full">
                                 <div class="flex justify-between w-64 mb-4 w-full">
-                                    <div class="w-auto uppercase font-bold text-90 text-green-500 ">Today's Forcast Highs</div>
+                                    <div class="w-auto uppercase font-bold text-90 text-green-500 ">Four-Day Forecast (Highs)</div>
                                 </div>
-                                <div class="flex justify-between w-64 mb-4 w-full">
+                                <!-- <div class="flex justify-between w-64 mb-4 w-full">
                                     <div class="w-auto text-90">Precipitation</div><div id="precip" class="w-auto text-right">10 %</div>
                                 </div>
                                 <div class="flex justify-between w-64 mb-8 w-full">
                                     <div class="w-auto text-90">Wind</div><div id="windSpeed" class="w-auto text-right">12 Mph</div>
-                                </div>
+                                </div> -->
 
                                 <!-- today -->
-                                <div class="flex flex-row">
-                                    <div class="flex flex-col w-1/4 bg-gray-100 text-black rounded-lg pb-4">
-                                        <div class="text-center pt-2 mb-2">
-                                            <img class="w-full md:w-4/5 z-50" src="./assets/images/rain.png" />
+                                <div class="flex flex-row m-3">
+                                    <div class="flex flex-col w-1/4 bg-gray-100 text-black rounded-lg">
+                                        <div class="text-center pt-1 mb-2">
+                                            <!-- <img class="w-full md:w-4/5 z-50" src="./assets/images/rain.png" /> -->
                                         </div>
-                                        <div id = "todaysymbol" class="text-center">
+                                        <div id = "todaysymbol" class="text-center pt-1 mb-2">
                                             <b id="today" class="font-normal"> </b><br>
-                                            <strong id="todayTemp" class="text-xl">29ºC</strong>
+                                            <strong id="todayTemp">29ºC</strong>
                                         </div>
                                     </div>
                 
                                     <!-- tomorrow -->
                                     <div class="flex flex-col w-1/4 bg-green-600 rounded-lg">
-                                        <div class="text-center pt-2 mb-2">
-                                            <img id="tomorrowsymbol" class="w-full md:w-4/5 z-50" src="./assets/images/cloud.png" />
+                                        <div class="text-center pt-1 mb-2">
+                                            <!-- <img id="tomorrowsymbol" class="w-full md:w-4/5 z-50" src="./assets/images/cloud.png" /> -->
                                         </div>
-                                        <div class="text-center">
+                                        <div class="text-center pt-1 mb-2">
                                             <b id="tomorrow" class="font-normal"> </b><br>
-                                            <strong id="tomorrowTemp" class="text-xl">21ºC</strong>
+                                            <strong id="tomorrowTemp">21ºC</strong>
                                         </div>
                                     </div>
 
                                     <!-- 2 days out -->
                                     <div class="flex flex-col w-1/4 bg-green-600 rounded-lg">
-                                        <div class="text-center pt-2 mb-2">
-                                            <img id ="2daysymbol" class="w-full md:w-4/5 z-50" src="./assets/images/cloud.png" />
+                                        <div class="text-center pt-1 mb-2">
+                                            <!-- <img id ="2daysymbol" class="w-full md:w-4/5 z-50" src="./assets/images/cloud.png" /> -->
                                         </div>
-                                        <div class="text-center">
+                                        <div class="text-center pt-1 mb-2">
                                             <b id="2days" class="font-normal"> </b><br>
-                                            <strong id="2daysTemp" class="text-xl">18ºC</strong>
+                                            <strong id="2daysTemp">18ºC</strong>
                                         </div>
                                     </div>
 
                                     <!-- 3 days out -->
                                     <div class="flex flex-col w-1/4 bg-green-600 rounded-lg">
-                                        <div class="text-center pt-2 mb-2">
-                                            <img id = "3daysymbol" class="w-full md:w-4/5 z-50" src="./assets/images/sun.png" />
+                                        <div class="text-center pt-1 mb-2">
+                                            <!-- <img id = "3daysymbol" class="w-full md:w-4/5 z-50" src="./assets/images/sun.png" /> -->
                                         </div>
-                                        <div class="text-center">
+                                        <div class="text-center pt-1 mb-2">
                                             <b id="3days" class="font-normal"> </b><br>
-                                            <strong id="3daysTemp" class="text-xl">25ºC</strong>
+                                            <strong id="3daysTemp">25ºC</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -197,7 +198,7 @@
             Retun to Homepage
         </button>
     </footer>
-
+    
     <script src="assets/js/parkpage.js"></script>
     
 </body>
