@@ -14,29 +14,10 @@ $('#2days').text(twodays.format('ddd'));
 var threedays = today.add(3, 'days');
 $('#3days').text(threedays.format('ddd'));
 
-
-// adding weather api
-// var requestUrl = "https://api.open-meteo.com/v1/forecast?" + LAT.var + LONG.var + "daily=weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago"
-
 var responseText = document.getElementById('response-text');
 var parkHead = document.getElementById('park-title')
 var parkFacts = document.getElementById('parkinfo')
 var parkImg = document.getElementById('parkPicture')
-
-function getApi(requestUrl) {
-    fetch(requestUrl)
-        .then(function (response) {
-            console.log(response);
-
-            return response.json();
-        });
-}
-
-// getApi(requestUrl);
-
-// adding national parks api
-var apiKey = "BDfajyEhltU1a2tl5CuDG7MpyjVByr4sITJOfWP0"
-var apiBase = "https://developer.nps.gov/api/v1/"
 
 // park info
 var park = {
@@ -54,17 +35,13 @@ var park = {
 
 var parkHistory = []
 
-// campground stuff
-// array
-var campground = {
-    name: [],
-    url: []
-};
+// retrieves park history from local storage
 function getHistory() {
     var parksStored = JSON.parse(localStorage.getItem("parkHistory"))
     return parksStored
 }
 
+// compares current park with its index in the history array
 function getIndex(parkCurrent) {
     var pIndex = -5
     for (var i = 0; i < parkHistory.length; i++) {
@@ -75,6 +52,7 @@ function getIndex(parkCurrent) {
     return pIndex
 }
 
+// retrieves information about park selected from local storage (using its index from history array), displays image and description text on page
 function getCurrent() {
     var parkCurrent = JSON.parse(localStorage.getItem("parkCurrent"))
     parkHead.textContent = parkCurrent.name
@@ -107,9 +85,66 @@ function getCurrent() {
     facts.textContent = park.descript
     parkFacts.appendChild(facts)
     fetchForecast(latitude, longitude)
-
-    // displayInfo(park.descript, park.fee, park.hours, park.weather)
 }
+
+
+
+ var parkForecast = {
+        forecastDate: [],
+        forecastTemp: []
+    };
+
+// generates temperature values on corresponding days of weather widget
+function displayForecast() {
+    // today
+    document.getElementById("todayTemp").textContent = parkForecast.forecastTemp[0] + "ºF";
+  
+    // tomorrow
+    document.getElementById("tomorrowTemp").textContent = parkForecast.forecastTemp[1] + "ºF";
+  
+    // 2 days out
+    document.getElementById("2daysTemp").textContent = parkForecast.forecastTemp[2] + "ºF";
+  
+    // 3 days out
+    document.getElementById("3daysTemp").textContent = parkForecast.forecastTemp[3] + "ºF";
+  }
+
+// fetch funciton for retrieving temperature data for park (latitude and longitude plugged in) from weather api
+function fetchForecast(latitude, longitude) {
+    var apiUrlForecast = "https://api.weatherapi.com/v1/forecast.json?key=e63fd14c79024a649de02342232504&q=" + latitude + "," + longitude + "&days=5"
+    
+    fetch(apiUrlForecast).then(function (response){
+    return response.json();
+    })
+    .then(function (data) {
+        // initializeParkForecast();
+        if (data) {
+            if (!parkForecast) {
+                parkForecast = {
+                    forecastDate: [],
+                    forecastTemp: []
+                };
+            }
+            for (i=0; i<5; i++) {
+                // parkForecast.forecastDate.push(moment.unix(data[i].daily.dt).utcOffset(data.timezone / 3600).format("MMM Do, YYYY"));
+                parkForecast.forecastTemp.push(data.forecast.forecastday[i].day.maxtemp_f.toFixed(1));
+            }
+        }
+        displayForecast()
+    })
+    .catch(function (error) {
+        console.error(error);
+        console.log("Hello from weather");
+    });
+};
+
+getCurrent()
+
+// CODE BEGINNINGS FOR FUTURE DEVELOPMENT (additional info from api to display on page,etc.)
+
+// adding national parks api
+// var apiKey = "BDfajyEhltU1a2tl5CuDG7MpyjVByr4sITJOfWP0"
+// var apiBase = "https://developer.nps.gov/api/v1/"
 
 // var displayCampground = function () {
 //     if (campground) {
@@ -220,65 +255,3 @@ function getCurrent() {
 // };
 
 // // forecast info
-
-
- var parkForecast = {
-        forecastDate: [],
-        forecastTemp: []
-    };
-
-function displayForecast() {
-    // today
-    document.getElementById("todayTemp").textContent = parkForecast.forecastTemp[0] + "ºF";
-  
-    // tomorrow
-    document.getElementById("tomorrowTemp").textContent = parkForecast.forecastTemp[1] + "ºF";
-  
-    // 2 days out
-    document.getElementById("2daysTemp").textContent = parkForecast.forecastTemp[2] + "ºF";
-  
-    // 3 days out
-    document.getElementById("3daysTemp").textContent = parkForecast.forecastTemp[3] + "ºF";
-  }
-
-// fetch funciton 
-
-"https://api.weatherapi.com/v1/forecast.json?key=e63fd14c79024a649de02342232504&q=37.79256812,-105.5919572&days=5"
-var fetchForecast = function (latitude, longitude) {
-
-   
-
-    var apiUrlForecast = "https://api.weatherapi.com/v1/forecast.json?key=e63fd14c79024a649de02342232504&q=" + latitude + "," + longitude + "&days=5"
-    
-    fetch(apiUrlForecast).then(function (response){
-    return response.json();
-    })
-    .then(function (data) {
-        // initializeParkForecast();
-        if (data) {
-            if (!parkForecast) {
-                parkForecast = {
-                    forecastDate: [],
-                    forecastTemp: []
-                };
-            }
-            for (i=0; i<5; i++) {
-                // parkForecast.forecastDate.push(moment.unix(data[i].daily.dt).utcOffset(data.timezone / 3600).format("MMM Do, YYYY"));
-                parkForecast.forecastTemp.push(data.forecast.forecastday[i].day.maxtemp_f.toFixed(1));
-            }
-        }
-        displayForecast()
-    })
-    .catch(function (error) {
-        console.error(error);
-        console.log("Hello from weather");
-    });
-};
-
-getCurrent()
-    // e63fd14c79024a649de02342232504
-
-    
-    // var apiUrlForecast = "https://cors-anywhere.herokuapp.com/https://api.open-meteo.com/v1/forecast/daily?latitude=" + latitude + "&" + "longitude=" + longitude + "&temperature_2m_max&temperature_unit=fahrenheit&days=5"
-
-    // var apiUrlForecast = "https://api.open-meteo.com/v1/forecast/daily?latitude=" + latitude + "&longitude=" + longitude + "&weathercode,temperature_2m_max,precipitation_probability_max,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago&origin=*";

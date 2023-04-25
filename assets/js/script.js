@@ -6,11 +6,13 @@ var parksList = document.getElementById('parks-list')
 var parksPrevious = document.getElementById('parks-history')
 var parkHeader = document.getElementById('park-header')
 
+// array designated for current park being processed/selected
 var parkCurrent = {
     code: '',
     name: ''
 }
 
+// array for the purpose of storing data from nps for parks in selected state
 var parksOfState = {
     state: '',
     code: [],
@@ -25,6 +27,7 @@ var parksOfState = {
     lon: [],
 }
 
+// checks local storage for park history and initializes if not found
 var parkHistory;
 try {
   parkHistory = JSON.parse(localStorage.getItem('parkHistory')) || [];
@@ -51,6 +54,7 @@ function getHistory() {
     return parksStored
 }
 
+// checks to see if park selected  already exists in history array
 function newPark(code) {
     console.log(code)
     var found = false
@@ -65,7 +69,7 @@ function newPark(code) {
     return found
     
 }
-
+// saves information about park from api, pushes to history array, and stores array in local storage
 function saveHistory(code, name) {
 
     foundIt = newPark(code)
@@ -103,6 +107,7 @@ function saveHistory(code, name) {
     }
 }
 
+// generates list on page of parks user has previously visited on the site
 function displayHistory(parkHistory) {
     refresh(parksPrevious)
 
@@ -132,8 +137,9 @@ function displayHistory(parkHistory) {
 }
 
 
-
+// generates list on page of the parks found in the state selected
 function displayParksList() {
+    refresh(parksList)
     if(parksOfState) {
         console.log(parksOfState)
         for (var i = 0; i < parksOfState.code.length; i++) {
@@ -166,7 +172,7 @@ function displayParksList() {
 }
 
 
-
+// initializes array containing info for parks of a given state
 function initParks() {
     parksOfState.state = '';
     parksOfState.code.length = 0;
@@ -181,6 +187,7 @@ function initParks() {
     parksOfState.lon.length = 0;
 }
 
+// calls to National Park Service API for the parks in the state selected and assigns corresponding data on parks to parksOfState array
 function fetchParks(state) {
     initParks()
     
@@ -228,8 +235,8 @@ function fetchParks(state) {
 
 restartClean()
 
+// generates header for parks list, triggered by selection of state from dropdown
 function stateselect() {
-    // restartClean()
     var stateName = document.getElementById('state-name')
 
     var stateAbbr = (stateName.options[stateName.selectedIndex]).value
